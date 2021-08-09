@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 //
 import { Hero, Publisher } from '../../interfaces/heroes.interface';
 //
 import { HeroesService } from '../../services/heroes.service';
+//
+import { DialogConfirmComponent } from '../../components/dialog-confirm/dialog-confirm.component';
 
 @Component({
   selector: 'app-add',
@@ -43,7 +46,8 @@ export class AddComponent implements OnInit {
     private heroesService: HeroesService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -71,8 +75,17 @@ export class AddComponent implements OnInit {
   }
 
   deleteHero() {
-    this.heroesService.deleteHero(this.hero.id!).subscribe((resp) => {
-      this.router.navigate(['/heroes']);
+    const dialog = this.dialog.open(DialogConfirmComponent, {
+      width: '350px',
+      data: this.hero,
+    });
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.heroesService.deleteHero(this.hero.id!).subscribe((resp) => {
+          this.router.navigate(['/heroes']);
+        });
+      }
     });
   }
 
