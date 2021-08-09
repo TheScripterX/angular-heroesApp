@@ -1,1 +1,59 @@
-<p>add works!</p>
+<h1>
+  New Hero <small>{{ hero.superhero }}</small>
+</h1>
+
+<div fxLayout="row" fxLayoutGap="40px">
+  <div fxFlex="50" fxLayout="column">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+      <mat-form-field fxFlex="100" fxLayout.xs="column">
+        <mat-label>Super Hero</mat-label>
+        <input type="text" matInput [(ngModel)]="hero.superhero" required />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Alter Ego</mat-label>
+        <input type="text" matInput [(ngModel)]="hero.alter_ego" required />
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <mat-label>First Appearance</mat-label>
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="hero.first_appearance"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Characters</mat-label>
+      <input type="text" matInput [(ngModel)]="hero.characters" required />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Publisher</mat-label>
+      <mat-select [(ngModel)]="hero.publisher" required>
+        <mat-option [value]="publisher.id" *ngFor="let publisher of publishers">
+          {{ publisher.desc }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Url Picture</mat-label>
+      <input type="url" matInput [(ngModel)]="hero.alt_img" required />
+    </mat-form-field>
+    <br />
+    <div fxLayout>
+      <button mat-raised-button color="primary" (click)="save()">
+        <mat-icon>edit</mat-icon> Save
+      </button>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        color="warn"
+        *ngIf="hero.id"
+        (click)="deleteHero()"
+      >
+        <mat-icon>delete</mat-icon> Delete
+      </button>
+    </div>
+  </div>
+  <div fxFlex="50"><img [src]="hero | image" /></div>
+</div>
