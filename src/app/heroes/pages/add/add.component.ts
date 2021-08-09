@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+//
 import { Hero, Publisher } from '../../interfaces/heroes.interface';
+//
 import { HeroesService } from '../../services/heroes.service';
 
 @Component({
@@ -39,7 +42,8 @@ export class AddComponent implements OnInit {
   constructor(
     private heroesService: HeroesService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -50,13 +54,14 @@ export class AddComponent implements OnInit {
     if (this.hero.id) {
       this.heroesService
         .editHero(this.hero)
-        .subscribe((hero) => console.log('Edited ', hero));
+        .subscribe((hero) => this.showSnackBar('Hero updated!'));
     } else {
       console.log(this.hero);
       this.heroesService.addHero(this.hero).subscribe(
         (hero) => {
           console.log('Hero created!');
           this.router.navigate(['/heroes/update', hero.id]);
+          this.showSnackBar('Hero created!');
         },
         () => {
           console.error('syntax error');
@@ -81,5 +86,10 @@ export class AddComponent implements OnInit {
           .subscribe((hero) => (this.hero = hero))
       );
     }
+  }
+  showSnackBar(message: string) {
+    this.snackBar.open(message, 'OK!', {
+      duration: 2500,
+    });
   }
 }
